@@ -40,46 +40,11 @@ final class ContainerCallVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Node\Expr\MethodCall) {
-            if (!property_exists($node->name, 'name')) {
-                return null;
-            }
-            if ($node->name->name !== 'get') {
-                return null;
-            }
-
-            // calling on attribute of `this`
-            if (!property_exists($node, 'var')) {
-                return null;
-            }
-            if (!property_exists($node->var, 'var')) {
-                return null;
-            }
-            if ($node->var->var->name === 'this') {
-                $alias = $node->var->name->name;
-                $resolvedClassName = $this->typeResolver->getAttributeType($alias);
-                if (!in_array(ContainerInterface::class, class_implements($resolvedClassName), true)) {
-                    return null;
-                }
-
-                $this->calls[] = $this->createCall($node, CallToContainer::SOURCE_CONTAINER);
-            }
-
-            return null;
+            $this->handleMethodCall($node);
         }
 
         if ($node instanceof Node\Expr\StaticCall) {
-            if (!property_exists($node->name, 'name')) {
-                return null;
-            }
-            if ($node->name->name !== 'get') {
-                return null;
-            }
-            if (!($node->class instanceof Name\FullyQualified)) {
-                return null;
-            }
-            if ($node->class && $node->class->toCodeString() === '\ChameleonSystem\CoreBundle\ServiceLocator') {
-                $this->calls[] = $this->createCall($node, CallToContainer::SOURCE_SERVICE_LOCATOR);
-            }
+            $this->handleStaticCall($node);
         }
     }
 
@@ -114,5 +79,56 @@ final class ContainerCallVisitor extends NodeVisitorAbstract
     public function getCalls(): array
     {
         return $this->calls;
+    }
+
+    /**
+     * handleMethodCall
+     * @param Node\Expr\MethodCall $node
+     */
+    private function handleMethodCall(Node\Expr\MethodCall $node): void
+    {
+        if (!property_exists($node->name, 'name')) {
+            return;
+        }
+        if ($node->name->name !== 'get') {
+            return;
+        }
+
+        // calling on attribute of `this`
+        if (!property_exists($node, 'var')) {
+            return;
+        }
+        if (!property_exists($node->var, 'var')) {
+            return;
+        }
+        if ($node->var->var->name === 'this') {
+            $alias = $node->var->name->name;
+            $resolvedClassName = $this->typeResolver->getAttributeType($alias);
+            if (!in_array(ContainerInterface::class, class_implements($resolvedClassName), true)) {
+                return;
+            }
+
+            $this->calls[] = $this->createCall($node, CallToContainer::SOURCE_CONTAINER);
+        }
+    }
+
+    /**
+     * handleStaticCall
+     * @param Node\Expr\StaticCall $node
+     */
+    private function handleStaticCall(Node\Expr\StaticCall $node): void
+    {
+        if (!property_exists($node->name, 'name')) {
+            return;
+        }
+        if ($node->name->name !== 'get') {
+            return;
+        }
+        if (!($node->class instanceof Name\FullyQualified)) {
+            return;
+        }
+        if ($node->class && $node->class->toCodeString() === '\ChameleonSystem\CoreBundle\ServiceLocator') {
+            $this->calls[] = $this->createCall($node, CallToContainer::SOURCE_SERVICE_LOCATOR);
+        }
     }
 }
