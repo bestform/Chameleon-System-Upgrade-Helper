@@ -30,7 +30,7 @@ final class Warning
      *
      * @param OutputInterface $output
      */
-    public function format(OutputInterface $output)
+    public function format(OutputInterface $output): void
     {
         $outputStyle = new OutputFormatterStyle('magenta', 'default', ['bold']);
         $output->getFormatter()->setStyle('warn', $outputStyle);

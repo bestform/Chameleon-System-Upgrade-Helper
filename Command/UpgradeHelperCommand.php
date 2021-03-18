@@ -30,7 +30,7 @@ final class UpgradeHelperCommand extends Command
         $this->validator = $validator;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Finds all places, where a private service might have to be declared public instead')
@@ -41,7 +41,7 @@ final class UpgradeHelperCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $calls = $this->parser->parseDirectory($input->getArgument('root'), $output);
         $warnings = $this->validator->validate($calls);
