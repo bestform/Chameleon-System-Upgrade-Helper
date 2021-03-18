@@ -20,6 +20,16 @@ final class Parser
 {
 
     /**
+     * @var \PhpParser\Parser
+     */
+    private $parser;
+
+    public function __construct()
+    {
+        $this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+    }
+
+    /**
      * parseDirectory will parse every .php file contained in $rootDirectory, including sub directories
      * and emit all calls to the symfony container `get` method.
      *
@@ -66,8 +76,7 @@ final class Parser
      */
     public function parse(string $contents, string $fileName): array
     {
-        $phpParser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $ast = $phpParser->parse($contents);
+        $ast = $this->parser->parse($contents);
 
         $traverser = new NodeTraverser();
         $nameResolver = new NameResolver();
