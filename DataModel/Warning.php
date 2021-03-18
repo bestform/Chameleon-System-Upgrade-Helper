@@ -11,9 +11,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class Warning
 {
-    /** @var string The call is implicit using a variable */
+    /**
+     * @var string The call is implicit using a variable
+     */
     public const TYPE_IMPLICIT = 'implicit';
-    /** @var string The call tries to fetch a non existing service */
+    /**
+     * @var string The call tries to fetch a non existing service
+     */
     public const TYPE_NON_EXISTENT = 'non-existent';
 
     /**
