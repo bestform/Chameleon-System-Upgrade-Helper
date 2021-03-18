@@ -104,6 +104,9 @@ final class ContainerCallVisitor extends NodeVisitorAbstract
         if ($node->var->var->name === 'this') {
             $alias = $node->var->name->name;
             $resolvedClassName = $this->typeResolver->getAttributeType($alias);
+            if ($resolvedClassName === null) {
+                return;
+            }
             if (!in_array(ContainerInterface::class, class_implements($resolvedClassName), true)) {
                 return;
             }
