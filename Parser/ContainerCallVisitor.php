@@ -8,6 +8,7 @@ use ChameleonSystem\UpgradeHelperBundle\DataModel\CallToContainer;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
+use Psr\Container\ContainerInterface;
 
 /**
  * ContainerCallVisitor will visit every call to a container/service locator `get` method and produce
@@ -56,7 +57,7 @@ final class ContainerCallVisitor extends NodeVisitorAbstract
             if ($node->var->var->name === 'this') {
                 $alias = $node->var->name->name;
                 $resolvedClassName = $this->typeResolver->getAttributeType($alias);
-                if ($resolvedClassName !== '\Symfony\Component\DependencyInjection\Container' && $resolvedClassName !== '\Symfony\Component\DependencyInjection\ContainerInterface') {
+                if (!in_array(ContainerInterface::class, class_implements($resolvedClassName), true)) {
                     return null;
                 }
 
