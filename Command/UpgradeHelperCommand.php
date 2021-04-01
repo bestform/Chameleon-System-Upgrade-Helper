@@ -39,7 +39,7 @@ final class UpgradeHelperCommand extends Command
             ->addArgument(
                 'root',
                 InputArgument::REQUIRED,
-                "The absolute path to the root directory of the sources to parse. If you are running the command inside a container, make sure to provide the absolute path inside the container.")
+                'The absolute path to the root directory of the sources to parse. If you are running the command inside a container, make sure to provide the absolute path inside the container.')
         ;
     }
 
@@ -52,7 +52,7 @@ final class UpgradeHelperCommand extends Command
 
         foreach($warnings as $warning) {
             $this->writeWarning($warning, $output);
-            $output->writeln("");
+            $output->writeln('');
         }
 
         return 0;
