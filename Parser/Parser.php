@@ -131,7 +131,7 @@ final class Parser
 
         $output->writeln("");
         foreach ($this->errors as $error) {
-            $output->writeln($error);
+            $output->writeln(sprintf('<warn>%s</warn>', $error));
         }
     }
 }
