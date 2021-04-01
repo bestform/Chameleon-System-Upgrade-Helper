@@ -107,6 +107,10 @@ final class ContainerCallVisitor extends NodeVisitorAbstract
             if ($resolvedClassName === null) {
                 return;
             }
+            $resolvedClassName = ltrim($resolvedClassName, '\\');
+            if(!$this->nameIsResolvable($resolvedClassName)) {
+                return;
+            }
             if (!in_array(ContainerInterface::class, class_implements($resolvedClassName), true)) {
                 return;
             }
@@ -133,5 +137,15 @@ final class ContainerCallVisitor extends NodeVisitorAbstract
         if ($node->class && $node->class->toCodeString() === '\ChameleonSystem\CoreBundle\ServiceLocator') {
             $this->calls[] = $this->createCall($node, CallToContainer::SOURCE_SERVICE_LOCATOR);
         }
+    }
+
+    /**
+     * nameIsResolvable
+     * @param string $resolvedClassName
+     * @return bool
+     */
+    private function nameIsResolvable(string $resolvedClassName): bool
+    {
+        return interface_exists($resolvedClassName) || class_exists($resolvedClassName) || trait_exists($resolvedClassName);
     }
 }
