@@ -44,7 +44,7 @@ final class Parser
      *
      * @param string $rootDirectoy
      * @param OutputInterface|null $output
-     * @param string[] $filterDirectories
+     * @param string[] $filterDirectories - a list of directories that should not be parsed. The path is matched against the given string and if a part of it matches, the directory will be excluded
      * @return CallToContainer[]
      */
     public function parseDirectory(string $rootDirectoy, OutputInterface $output = null, $filterDirectories = ['chameleon-system/upgrade-helper']): array
