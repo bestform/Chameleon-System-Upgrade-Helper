@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon-system.upgrade-helper.command" class="ChameleonSystem\UpgradeHelperBundle\Command\UpgradeHelperCommand">
+            <argument type="service" id="chameleon-system.upgrade-helper.parser" />
+            <argument type="service" id="chameleon-system.upgrade-helper.validator"/>
+            <tag name="console.command" />
+        </service>
+        <service id="chameleon-system.upgrade-helper.parser" class="ChameleonSystem\UpgradeHelperBundle\Parser\Parser">
+        </service>
+        <service id="chameleon-system.upgrade-helper.validator" class="ChameleonSystem\UpgradeHelperBundle\Validator\Validator">
+            <argument type="service" id="service_container"/>
+            <argument type="collection">
+                <argument type="string">chameleon_system_core.chameleon_controller</argument>
+            </argument>
+        </service>
+    </services>
+
+</container>
