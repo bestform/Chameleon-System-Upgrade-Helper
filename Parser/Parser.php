@@ -33,7 +33,7 @@ final class Parser
     public function __construct()
     {
         // see https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown
-        ini_set("xdebug.max_nesting_level", "3000");
+        ini_set('xdebug.max_nesting_level', '3000');
         $this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $this->errors = [];
     }
@@ -100,7 +100,7 @@ final class Parser
         try {
             $ast = $this->parser->parse($contents);
         } catch (Error $e) {
-            $this->errors[] = sprintf("Could not parse file %s: %s", $fileName, $e->getMessage());
+            $this->errors[] = sprintf('Could not parse file %s: %s', $fileName, $e->getMessage());
             return [];
         }
 
