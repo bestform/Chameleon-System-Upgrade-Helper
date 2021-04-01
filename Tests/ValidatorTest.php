@@ -23,7 +23,7 @@ final class ValidatorTest extends TestCase
         $container->set('existing', null);
 
         $parser = new Parser();
-        $calls = $parser->parseDirectory(__DIR__ . '/Fixtures');
+        $calls = $parser->parseDirectory(__DIR__ . '/Fixtures', null, []);
 
         $validator = new Validator($container);
 
@@ -77,7 +77,7 @@ final class ValidatorTest extends TestCase
         $container->set('existing', null);
 
         $parser = new Parser();
-        $calls = $parser->parseDirectory(__DIR__ . '/Fixtures');
+        $calls = $parser->parseDirectory(__DIR__ . '/Fixtures', null, []);
 
         $validator = new Validator($container, ['non-existing']);
 
@@ -114,6 +114,18 @@ final class ValidatorTest extends TestCase
             self::assertEquals($case['service'], $warnings[$i]->call->service);
             $i++;
         }
+    }
+
+    /**
+     * validateDirectoryExclusion
+     * @test
+     */
+    public function validateDirectoryExclusion()
+    {
+        $parser = new Parser();
+        $calls = $parser->parseDirectory(__DIR__ . '/Fixtures', null, ['/Fixtures']);
+
+        self::assertCount(0, $calls);
     }
 
 }
